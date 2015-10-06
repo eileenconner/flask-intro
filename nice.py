@@ -10,7 +10,17 @@ app = Flask(__name__)
 # route to handle the landing page of a website.
 @app.route('/')
 def start_here():
-    return "Hi! This is the home page."
+    return """
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>Hi There!</title>
+        </head>
+        <body>
+           <a href="/hello">Click for hello</a>
+        </body>
+    </html>
+    """
 
 # route to display a simple web page
 @app.route('/hello')
@@ -23,24 +33,28 @@ def say_hello():
         </head>
         <body>
             <h1>Hi There!</h1>
-            <form action="/greet">
+            <form action="/greet" method="POST">
                 <label>What's your name? <input type="text" name="person"></label>
                 <input type="submit">
+                Select a compliment:
+                <label><input type="radio" name="compliment" value="Fantastic">Fantastic</label>
+                <label><input type="radio" name="compliment" value="Interesting">Interesting</label>
             </form>
         </body>
     </html>
 
     """
 
-@app.route('/greet')
+@app.route('/greet', methods=["POST"])
 def greet_person():
-    player = request.args.get("person")
+    player = request.form.get("person")
 
     AWESOMENESS = [
         'awesome', 'terrific', 'fantastic', 'neato', 'fantabulous', 'wowza', 'oh-so-not-meh',
         'brilliant', 'ducky', 'coolio', 'incredible', 'wonderful', 'smashing', 'lovely']
 
-    compliment = choice(AWESOMENESS)
+    # compliment = choice(AWESOMENESS)
+    compliment = request.form.get("compliment")
 
     return """
     <!DOCTYPE html>
